@@ -1,0 +1,96 @@
+// components/TopBar.tsx
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+export default function TopBar() {
+  const pathname = usePathname() || "/";
+
+  const linkBase =
+    "whitespace-nowrap text-xl px-2 py-1 rounded transition-colors focus:outline-none focus-visible:ring-2 ring-neutral-500 font-mono text-sm tracking-wide";
+  const item = (href: string, label: string, asciiWrap: (s: string) => string) => {
+    const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+    return (
+      <Link
+        key={href}
+        href={href}
+        aria-current={active ? "page" : undefined}
+        className={`${linkBase} ${active ? "text-white" : "text-neutral-300 hover:text-white"}`}
+      >
+        {asciiWrap(label)}
+      </Link>
+    );
+  };
+
+  return (
+    <>
+      <div className="fixed top-0 inset-x-0 z-20 h-15">
+        <nav
+          className="
+            mx-auto mt-3 mb-2 max-w-6xl
+            rounded-2xl border
+            bg-neutral-900/70
+            border-neutral-800/70
+            shadow-[0_0_0_1px_rgba(255,255,255,0.03)_inset]
+            backdrop-blur
+            h-full
+          "
+        >
+          <div className="flex items-center gap-2 px-4 py-2 h-full overflow-x-auto [scrollbar-width:none]">
+            {/* left group: scrolls sideways on phones */}
+            <div className="flex items-center gap-1 lg:gap-2 shrink-0">
+              {item("/", "home", (s) => `[ ${s} ]`)}
+              <span className="text-neutral-600 select-none">::</span>
+              {item("/about", "about", (s) => `[ ${s} ]`)}
+              {item("/experience", "experience", (s) => `[ ${s} ]`)}
+              {item("/projects", "projects", (s) => `[ ${s} ]`)}
+              {item("/resume", "resume", (s) => `[ ${s} ]`)}
+              {item("/career-goals", "career goals", (s) => `[ ${s} ]`)}
+              {item("/blog", "blog", (s) => `[ ${s} ]`)}
+              {item("/contact", "contact", (s) => `[ ${s} ]`)}
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      {/* fixed icons at top-right of viewport (outside the nav); the same links are on /contact for small screens */}
+      <div className="fixed top-3 right-6 z-30 hidden xl:block">
+        <div className="rounded-2xl border bg-neutral-900/70 border-neutral-800/70 shadow-[0_0_0_1px_rgba(255,255,255,0.03)_inset] backdrop-blur p-2">
+          <div className="grid grid-cols-2 gap-1">
+            <button
+              onClick={() => window.open("https://github.com/rayyanh192", "GitHub", "width=1200,height=800,scrollbars=yes,resizable=yes")}
+              aria-label="GitHub"
+              className="p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+            >
+              <img src="/github.png" alt="GitHub" className="w-6 h-6" />
+            </button>
+            <button
+              onClick={() => window.open("https://www.linkedin.com/in/rayyan-h/", "LinkedIn", "width=1200,height=800,scrollbars=yes,resizable=yes")}
+              aria-label="LinkedIn"
+              className="p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+            >
+              <img src="/linkedin.png" alt="LinkedIn" className="w-6 h-6" />
+            </button>
+            <button
+              onClick={() => window.open("https://x.com/xrayz_0", "X", "width=600,height=800,scrollbars=yes,resizable=yes")}
+              aria-label="X (Twitter)"
+              className="p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </button>
+            <button
+              onClick={() => window.open("/rayyan-hussain.pdf", "Resume", "width=900,height=1000,scrollbars=yes,resizable=yes")}
+              aria-label="Resume"
+              className="p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+            >
+              <img src="/resume.png" alt="Resume" className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
